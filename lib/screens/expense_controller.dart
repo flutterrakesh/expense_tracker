@@ -35,19 +35,22 @@ class ExpenseController extends GetxController{
 
   }
 
-  void _calculateTotals() {
-    String today = DateTime.now().toIso8601String().substring(0, 10);
-    DateTime todayDate = DateTime.now();
-    DateTime weekStart = todayDate.subtract(Duration(days: todayDate.weekday - 1));
+  void _calculateTotals({DateTime? selectedDate}) {
+    DateTime endDate = selectedDate ?? DateTime.now();
+    String endDateStr = endDate.toIso8601String().substring(0, 10);
 
+    // Today total (for selected date)
     todayTotal.value = expenses
-        .where((e) => e.date == today)
+        .where((e) => e.date == endDateStr)
         .fold(0, (sum, e) => sum + e.amount);
+
+    // Week total (7 days ending on selected date)
+    DateTime weekStart = endDate.subtract(const Duration(days: 6)); // 7-day range
 
     weekTotal.value = expenses.where((e) {
       DateTime expenseDate = DateTime.parse(e.date);
-      return expenseDate.isAfter(weekStart.subtract(const Duration(days: 1))) &&
-          expenseDate.isBefore(todayDate.add(const Duration(days: 1)));
+      return !expenseDate.isBefore(weekStart) && !expenseDate.isAfter(endDate);
     }).fold(0, (sum, e) => sum + e.amount);
   }
+
 }

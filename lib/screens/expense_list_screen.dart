@@ -69,17 +69,17 @@ class ExpenseListScreen extends StatelessWidget {
                 return Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Row(
-                      children: [
-                        getCategoryIcon(e.category),
-                        SizedBox(width: 8,),
-                        Text(e.category),
-                      ],
+                    Flexible(
+                      child: Row(
+                        children: [
+                          getCategoryIcon(e.category),
+                          SizedBox(width: 8,),
+                          Text(e.category),
+                        ],
+                      ),
                     ),
-                    SizedBox(width: 8,),
-                    Text(e.date),
-                    SizedBox(width: 8,),
-                    Text('\$${e.amount.toStringAsFixed(2)}'),
+                    Flexible(child: Text(e.date)),
+                    Flexible(child: Text('\$${e.amount.toStringAsFixed(2)}')),
                   ],
                 );
               }, separatorBuilder: (BuildContext context, int index) {
